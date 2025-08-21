@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Financeiro Clínica Attento</title>
+<!-- Fonts as per manual: Montserrat and Work Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Work+Sans&display=swap" rel="stylesheet" />
+
+<style>
+  /* Cores principais conforme manual */
+  :root {
+    --verde-claro: #aaccbe;
+    --cinza-escuro: #575755;
+    --degrade-gold-start: #d4af37;
+    --degrade-gold-end: #b8860b;
+  }
+  body {
+    font-family: 'Work Sans', Arial, sans-serif;
+    margin: 20px;
+    background: #f7f7f7;
+    color: var(--cinza-escuro);
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--cinza-escuro);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 30px;
+  }
+  section {
+    background: white;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+  label {
+    display: block;
+    margin: 10px 0 6px;
+    font-weight: 600;
+  }
+  input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1.8px solid var(--verde-claro);
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--cinza-escuro);
+    background: #fafafa;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--degrade-gold-start);
+    background: #fff;
+  }
+  button {
+    margin-top: 16px;
+    background: linear-gradient(135deg, var(--degrade-gold-start), var(--degrade-gold-end));
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: linear-gradient(135deg, var(--degrade-gold-end), var(--degrade-gold-start));
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 18px;
+    font-size: 0.95rem;
+  }
+  th, td {
+    border: 1.5px solid var(--verde-claro);
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--cinza-escuro);
+  }
+  th {
+    background: var(--verde-claro);
+    font-weight: 700;
+  }
+  .inline {
+    display: inline-block;
+    margin-right: 14px;
+  }
+  .small-input {
+    width: 120px;
+  }
+  .input-group {
+    margin-bottom: 16px;
+  }
+  .flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 26px;
+  }
+  .flex-grow {
+    flex-grow: 1;
+    min-width: 180px;
+  }
+  .hidden {
+    display: none;
+  }
+  .category-list {
+    font-size: 0.9rem;
+    color: var(--cinza-escuro);
+    margin-top: 6px;
+  }
+  .text-small {
+    font-size: 0.85rem;
+    color: var(--cinza-escuro);
+  }
+  .error {
+    color: #b00020;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  hr {
+    margin: 30px 0;
+    border: none;
+    border-top: 2px solid var(--verde-claro);
+  }
+  /* Logo container at top */
+  #logo-container {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  #logo-container img {
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  #logo-container .tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--verde-claro);
+  }
+
+  /* Scroll horizontal for tables on small screens */
+  .table-responsive {
+    overflow-x: auto;
+  }
+</style>
+</head>
+<body>
+
+<div id="logo-container">
+  <img src="IMG_2409.png" alt="Logo Clínica Attento" />
+  <div class="tagline">INSTITUTO DE SAÚDE ESPECIALIZADA</div>
+</div>
+
+<h1>Financeiro Clínica Attento</h1>
+
+<section id="investimentos">
+  <h2>Investimento Inicial e Aportes dos Sócios</h2>
+  <form id="investmentForm">
+    <div class="input-group">
+      <label for="socioName">Sócio</label>
+      <select id="socioName" required>
+        <option value="Jessica">Jessica</option>
+        <option value="Wevelin">Wevelin</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="initialInvestment">Investimento Inicial (R$)</label>
+      <input type="number" id="initialInvestment" min="0" step="0.01" placeholder="Valor inicial" />
+    </div>
+    <div class="input-group">
+      <label for="aporteValue">Aporte Adicional (R$)</label>
+      <input type="number" id="aporteValue" min="0" step="0.01" placeholder="Novo aporte" />
+    </div>
+    <button type="submit">Registrar Investimento/Aporte</button>
+  </form>
+  <h3>Resumo dos Investimentos e Aportes</h3>
+  <div id="investmentSummary"></div>
+</section>
+
+<hr />
+
+<section id="entrada-section">
+  <h2>Lançar Entrada</h2>
+  <form id="entradaForm">
+    <div class="input-group">
+      <label for="entradaCategoria">Categoria de Entrada</label>
+      <select id="entradaCategoria" required></select>
+    </div>
+    <div class="input-group hidden" id="entradaOutrasContainer">
+      <label for="entradaOutrasDescricao">Descreva outra categoria</label>
+      <input type="text" id="entradaOutrasDescricao" />
+    </div>
+    <div class="input-group">
+      <label for="entradaValor">Valor (R$)</label>
+      <input type="number" id="entradaValor" min="0" step="0.01" required />
+    </div>
+    <div class="input-group">
+      <label for="entradaData">Data</label>
+      <input type="date" id="entradaData" required />
+    </div>
+    <button type="submit">Adicionar Entrada</button>
+  </form>
+</section>
+
+<section id="saida-section">
+  <h2>Lançar Saída</h2>
+  <form id="saidaForm">
+    <div class="input-group">
+      <label for="saidaCategoria">Categoria de Saída</label>
+      <select id="saidaCategoria" required></select>
+    </div>
+    <div class="input-group hidden" id="saidaExtraContainer">
+      <label for="saidaExtraDescricao">Descreva a categoria</label>
+      <input type="text" id="saidaExtraDescricao" />
+    </div>
+    <div class="input-group hidden" id="saidaFuncionarioContainer">
+      <label for="saidaFuncionario">Funcionário</label>
+      <input type="text" id="saidaFuncionario" placeholder="Nome do funcionário" />
+    </div>
+    <div class="input-group hidden" id="saidaImpostoContainer">
+      <label for="saidaImposto">Imposto</label>
+      <input type="text" id="saidaImposto" placeholder="Nome do imposto" />
+    </div>
+    <div class="input-group">
+      <label for="saidaValor">Valor (R$)</label>
+      <input type="number" id="saidaValor" min="0" step="0.01" required />
+    </div>
+    <div class="input-group">
+      <label for="saidaData">Data</label>
+      <input type="date" id="saidaData" required />
+    </div>
+    <button type="submit">Adicionar Saída</button>
+  </form>
+</section>
+
+<hr />
+
+<section id="categoria-nova">
+  <h2>Adicionar Nova Categoria</h2>
+  <form id="novaCategoriaForm">
+    <div class="input-group">
+      <label for="tipoCategoria">Tipo de Categoria</label>
+      <select id="tipoCategoria" required>
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="nomeCategoriaNova">Nome da Categoria</label>
+      <input type="text" id="nomeCategoriaNova" required />
+    </div>
+    <button type="submit">Adicionar Categoria</button>
+  </form>
+</section>
+
+<hr />
+
+<section id="controle-aluguel">
+  <h2>Controle de Recebimentos de Aluguel</h2>
+  <form id="aluguelForm">
+    <div class="input-group">
+      <label for="profissionalNome">Profissional</label>
+      <input type="text" id="profissionalNome" required />
+    </div>
+    <div class="flex-row">
+      <div class="input-group flex-grow">
+        <label>Períodos da Semana (Dia e Manhã/Tarde)</label>
+        <textarea id="periodosSemana" placeholder="Exemplo: Segunda - Manhã, Terça - Tarde" rows="3" required></textarea>
+      </div>
+      <div class="input-group flex-grow">
+        <label for="valorMensal">Valor Mensal (R$)</label>
+        <input type="number" id="valorMensal" min="0" step="0.01" required />
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="dataInicioAluguel">Data de Início</label>
+      <input type="date" id="dataInicioAluguel" required />
+    </div>
+    <div class="input-group">
+      <label for="dataBaixaAluguel">Data Baixa (quando o profissional sair)</label>
+      <input type="date" id="dataBaixaAluguel" />
+    </div>
+    <div class="input-group">
+      <label>Alterações de períodos e/ou valores (sem alterar dados anteriores)</label>
+      <textarea id="alteracoesAluguel" placeholder="Descreva alterações pontuais de período e/ou valor" rows="2"></textarea>
+    </div>
+    <button type="submit">Salvar Aluguel</button>
+  </form>
+  <h3>Profissionais Cadastrados</h3>
+  <div id="listaProfissionais" class="table-responsive"></div>
+</section>
+
+<hr />
+
+<section id="relatorios-section">
+  <h2>Relatórios e Balanço</h2>
+  <div class="input-group flex-row">
+    <div class="flex-grow">
+      <label for="periodoInicio">Data Início</label>
+      <input type="date" id="periodoInicio" />
+    </div>
+    <div class="flex-grow">
+      <label for="periodoFim">Data Fim</label>
+      <input type="date" id="periodoFim" />
+    </div>
+    <div class="flex-grow" style="margin-top: 38px;">
+      <button id="btnGerarRelatorio">Gerar Relatório</button>
+    </div>
+  </div>
+  <div id="relatorioOutput" class="table-responsive"></div>
+</section>
+
+<script>
+(() => {
+  const STORAGE_KEYS = {
+    investimentos: 'attento_investimentos',
+    categoriasEntrada: 'attento_cat_entrada',
+    categoriasSaida: 'attento_cat_saida',
+    entradas: 'attento_entradas',
+    saidas: 'attento_saidas',
+    alugueis: 'attento_alugueis',
+  };
+
+  const categoriasEntradaPadrao = [
+    "Salas",
+    "Aporte Jessica",
+    "Aporte Wevelin",
+    "Notas Jessica",
+    "Notas Wevelin",
+    "Nota Attento",
+    "Outras"
+  ];
+  const categoriasSaidaPadrao = [
+    "Aluguel",
+    "Energia",
+    "Internet",
+    "Prontuário",
+    "Salário",
+    "Impostos",
+    "Condomínio",
+    "Contabilidade",
+    "Informática",
+    "Papelaria",
+    "Limpeza",
+    "Consumo",
+    "Extras"
+  ];
+
+  function saveItem(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+  function loadItem(key, defaultValue) {
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      try {
+        return JSON.parse(raw);
+      } catch(e) { return defaultValue; }
+    }
+    return defaultValue;
+  }
+  function genId() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+  function formatDate(date) {
+    if (!date) return "";
+    return (new Date(date)).toISOString().split('T')[0];
+  }
+  function formatCurrency(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  let investimentos = loadItem(STORAGE_KEYS.investimentos, {
+    Jessica: { inicial: 0, aportes: []},
+    Wevelin: { inicial: 0, aportes: []}
+  });
+  let categoriasEntrada = loadItem(STORAGE_KEYS.categoriasEntrada, categoriasEntradaPadrao);
+  let categoriasSaida = loadItem(STORAGE_KEYS.categoriasSaida, categoriasSaidaPadrao);
+  let entradas = loadItem(STORAGE_KEYS.entradas, []);
+  let saidas = loadItem(STORAGE_KEYS.saidas, []);
+  let alugueis = loadItem(STORAGE_KEYS.alugueis, []);
+
+  const socioNameEl = document.getElementById("socioName");
+  const initialInvestmentEl = document.getElementById("initialInvestment");
+  const aporteValueEl = document.getElementById("aporteValue");
+  const investmentSummaryEl = document.getElementById("investmentSummary");
+  const investmentForm = document.getElementById("investmentForm");
+
+  const entradaCategoriaEl = document.getElementById("entradaCategoria");
+  const entradaOutrasContainer = document.getElementById("entradaOutrasContainer");
+  const entradaOutrasDescricaoEl = document.getElementById("entradaOutrasDescricao");
+  const entradaValorEl = document.getElementById("entradaValor");
+  const entradaDataEl = document.getElementById("entradaData");
+  const entradaForm = document.getElementById("entradaForm");
+
+  const saidaCategoriaEl = document.getElementById("saidaCategoria");
+  const saidaExtraContainer = document.getElementById("saidaExtraContainer");
+  const saidaExtraDescricaoEl = document.getElementById("saidaExtraDescricao");
+  const saidaFuncionarioContainer = document.getElementById("saidaFuncionarioContainer");
+  const saidaFuncionarioEl = document.getElementById("saidaFuncionario");
+  const saidaImpostoContainer = document.getElementById("saidaImpostoContainer");
+  const saidaImpostoEl = document.getElementById("saidaImposto");
+  const saidaValorEl = document.getElementById("saidaValor");
+  const saidaDataEl = document.getElementById("saidaData");
+  const saidaForm = document.getElementById("saidaForm");
+
+  const tipoCategoriaEl = document.getElementById("tipoCategoria");
+  const nomeCategoriaNovaEl = document.getElementById("nomeCategoriaNova");
+  const novaCategoriaForm = document.getElementById("novaCategoriaForm");
+
+  const profissionalNomeEl = document.getElementById("profissionalNome");
+  const periodosSemanaEl = document.getElementById("periodosSemana");
+  const valorMensalEl = document.getElementById("valorMensal");
+  const dataInicioAluguelEl = document.getElementById("dataInicioAluguel");
+  const dataBaixaAluguelEl = document.getElementById("dataBaixaAluguel");
+  const alteracoesAluguelEl = document.getElementById("alteracoesAluguel");
+  const aluguelForm = document.getElementById("aluguelForm");
+  const listaProfissionaisEl = document.getElementById("listaProfissionais");
+
+  const periodoInicioEl = document.getElementById("periodoInicio");
+  const periodoFimEl = document.getElementById("periodoFim");
+  const btnGerarRelatorio = document.getElementById("btnGerarRelatorio");
+  const relatorioOutputEl = document.getElementById("relatorioOutput");
+
+  function rebuildCategoriaSelects() {
+    entradaCategoriaEl.innerHTML = "";
+    categoriasEntrada.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      entradaCategoriaEl.appendChild(opt);
+    });
+
+    saidaCategoriaEl.innerHTML = "";
+    categoriasSaida.forEach(cat => {
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      saidaCategoriaEl.appendChild(opt);
+    });
+  }
+  rebuildCategoriaSelects();
+
+  entradaCategoriaEl.addEventListener("change", () => {
+    if (entradaCategoriaEl.value === "Outras") {
+      entradaOutrasContainer.classList.remove("hidden");
+      entradaOutrasDescricaoEl.required = true;
+    } else {
+      entradaOutrasContainer.classList.add("hidden");
+      entradaOutrasDescricaoEl.required = false;
+      entradaOutrasDescricaoEl.value = "";
+    }
+  });
+
+  saidaCategoriaEl.addEventListener("change", () => {
+    const val = saidaCategoriaEl.value;
+    if (val === "Extras") {
+      saidaExtraContainer.classList.remove("hidden");
+      saidaExtraDescricaoEl.required = true;
+    } else {
+      saidaExtraContainer.classList.add("hidden");
+      saidaExtraDescricaoEl.required = false;
+      saidaExtraDescricaoEl.value = "";
+    }
+
+    if (val === "Salário") {
+      saidaFuncionarioContainer.classList.remove("hidden");
+      saidaFuncionarioEl.required = true;
+    } else {
+      saidaFuncionarioContainer.classList.add("hidden");
+      saidaFuncionarioEl.required = false;
+      saidaFuncionarioEl.value = "";
+    }
+
+    if (val === "Impostos") {
+      saidaImpostoContainer.classList.remove("hidden");
+      saidaImpostoEl.required = true;
+    } else {
+      saidaImpostoContainer.classList.add("hidden");
+      saidaImpostoEl.required = false;
+      saidaImpostoEl.value = "";
+    }
+  });
+
+  investmentForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const socio = socioNameEl.value;
+    const inicial = parseFloat(initialInvestmentEl.value) || 0;
+    const aporte = parseFloat(aporteValueEl.value) || 0;
+
+    if (inicial > 0) {
+      investimentos[socio].inicial = inicial;
+    }
+    if (aporte > 0) {
+      investimentos[socio].aportes.push(aporte);
+    }
+
+    saveItem(STORAGE_KEYS.investimentos, investimentos);
+    initialInvestmentEl.value = "";
+    aporteValueEl.value = "";
+    renderInvestmentSummary();
+  });
+
+  function renderInvestmentSummary() {
+    let html = "";
+    for (const socio in investimentos) {
+      let inicial = investimentos[socio].inicial || 0;
+      let totalAportes = investimentos[socio].aportes.reduce((a,b) => a+b, 0);
+      let total = inicial + totalAportes;
+      html += `<p><strong>${socio}:</strong> Investimento Inicial: ${formatCurrency(inicial)}<br>Aportes: ${investimentos[socio].aportes.map(v => formatCurrency(v)).join(", ") || "-"}<br><strong>Total acumulado: ${formatCurrency(total)}</strong></p>`;
+    }
+    investmentSummaryEl.innerHTML = html;
+  }
+  renderInvestmentSummary();
+
+  novaCategoriaForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const tipo = tipoCategoriaEl.value;
+    const nome = nomeCategoriaNovaEl.value.trim();
+    if (!nome) return alert("Insira um nome para a categoria.");
+    if (tipo === "entrada") {
+      if (!categoriasEntrada.includes(nome)) {
+        categoriasEntrada.push(nome);
+        saveItem(STORAGE_KEYS.categoriasEntrada, categoriasEntrada);
+      }
+      rebuildCategoriaSelects();
+    } else if (tipo === "saida") {
+      if (!categoriasSaida.includes(nome)) {
+        categoriasSaida.push(nome);
+        saveItem(STORAGE_KEYS.categoriasSaida, categoriasSaida);
+      }
+      rebuildCategoriaSelects();
+    }
+    nomeCategoriaNovaEl.value = "";
+    alert(`Categoria "${nome}" adicionada em ${tipo === "entrada"? 'Entradas' : 'Saídas'}.`);
+  });
+
+  entradaForm.addEventListener("submit", e => {
+    e.preventDefault();
+    let categoria = entradaCategoriaEl.value;
+    let descricaoOutra = "";
+    if (categoria === "Outras") {
+      descricaoOutra = entradaOutrasDescricaoEl.value.trim();
+      if (!descricaoOutra) {
+        return alert("Por favor, descreva a categoria Outras.");
+      }
+      categoria = descricaoOutra;
+    }
+    const valor = parseFloat(entradaValorEl.value);
+    const data = entradaDataEl.value;
+    if (!valor || valor <= 0) return alert("Insira um valor válido.");
+    if (!data) return alert("Informe a data.");
+
+    entradas.push({
+      id: genId(),
+      categoria,
+      descricaoOutra,
+      valor,
+      data
+    });
+    saveItem(STORAGE_KEYS.entradas, entradas);
+    entradaForm.reset();
+    entradaCategoriaEl.value = categoriasEntrada[0];
+    entradaOutrasContainer.classList.add("hidden");
+    entradaOutrasDescricaoEl.required = false;
+    renderRelatorio();
+    alert("Entrada registrada.");
+  });
+
+  saidaForm.addEventListener("submit", e => {
+    e.preventDefault();
+    let categoria = saidaCategoriaEl.value;
+    let descricaoExtra = "";
+    let funcionario = "";
+    let imposto = "";
+
+    if (categoria === "Extras") {
+      descricaoExtra = saidaExtraDescricaoEl.value.trim();
+      if (!descricaoExtra) {
+        return alert("Por favor, descreva a categoria Extras.");
+      }
+      categoria = descricaoExtra;
+    }
+    if (categoria === "Salário") {
+      funcionario = saidaFuncionarioEl.value.trim();
+      if (!funcionario) return alert("Informe o nome do funcionário para salário.");
+    }
+    if (categoria === "Impostos") {
+      imposto = saidaImpostoEl.value.trim();
+      if (!imposto) return alert("Informe o nome do imposto.");
+    }
+    const valor = parseFloat(saidaValorEl.value);
+    const data = saidaDataEl.value;
+    if (!valor || valor <= 0) return alert("Insira um valor válido.");
+    if (!data) return alert("Informe a data.");
+
+    saidas.push({
+      id: genId(),
+      categoria,
+      descricaoExtra,
+      funcionario,
+      imposto,
+      valor,
+      data
+    });
+    saveItem(STORAGE_KEYS.saidas, saidas);
+    saidaForm.reset();
+    saidaCategoriaEl.value = categoriasSaida[0];
+    saidaExtraContainer.classList.add("hidden");
+    saidaFuncionarioContainer.classList.add("hidden");
+    saidaImpostoContainer.classList.add("hidden");
+    saidaExtraDescricaoEl.required = false;
+    saidaFuncionarioEl.required = false;
+    saidaImpostoEl.required = false;
+    renderRelatorio();
+    alert("Saída registrada.");
+  });
+
+  aluguelForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const profissional = profissionalNomeEl.value.trim();
+    const periodosSemana = periodosSemanaEl.value.trim();
+    const valorMensal = parseFloat(valorMensalEl.value);
+    const dataInicio = dataInicioAluguelEl.value;
+    const dataBaixa = dataBaixaAluguelEl.value || null;
+    const alteracoes = alteracoesAluguelEl.value.trim();
+
+    if (!profissional) return alert("Informe o nome do profissional.");
+    if (!periodosSemana) return alert("Informe os períodos da semana.");
+    if (!valorMensal || valorMensal <= 0) return alert("Informe um valor mensal válido.");
+    if (!dataInicio) return alert("Informe a data de início.");
+
+    const existenteIndex = alugueis.findIndex(a => a.profissional.toLowerCase() === profissional.toLowerCase());
+    if (existenteIndex >= 0) {
+      alugueis[existenteIndex] = {
+        ...alugueis[existenteIndex],
+        periodosSemana,
+        valorMensal,
+        dataInicio,
+        dataBaixa,
+        alteracoes
+      };
+    } else {
+      alugueis.push({
+        id: genId(),
+        profissional,
+        periodosSemana,
+        valorMensal,
+        dataInicio,
+        dataBaixa,
+        alteracoes
+      });
+    }
+    saveItem(STORAGE_KEYS.alugueis, alugueis);
+    aluguelForm.reset();
+    renderListaProfissionais();
+    alert("Dados do aluguel salvos.");
+  });
+
+  function renderListaProfissionais() {
+    if (alugueis.length === 0) {
+      listaProfissionaisEl.innerHTML = "<p>Nenhum profissional cadastrado.</p>";
+      return;
+    }
+    let html = `<table>
+      <thead><tr><th>Profissional</th><th>Períodos</th><th>Valor Mensal</th><th>Início</th><th>Baixa</th><th>Alterações</th></tr></thead><tbody>`;
+    alugueis.forEach(a => {
+      html += `<tr>
+        <td>${a.profissional}</td>
+        <td><pre style="white-space: pre-wrap; font-family: monospace;">${a.periodosSemana}</pre></td>
+        <td>${formatCurrency(a.valorMensal)}</td>
+        <td>${formatDate(a.dataInicio)}</td>
+        <td>${a.dataBaixa ? formatDate(a.dataBaixa) : '-'}</td>
+        <td><pre style="white-space: pre-wrap; font-family: monospace;">${a.alteracoes || '-'}</pre></td>
+      </tr>`;
+    });
+    html += `</tbody></table>`;
+    listaProfissionaisEl.innerHTML = html;
+  }
+  renderListaProfissionais();
+
+  function filtrarPorPeriodo(lista, inicio, fim) {
+    if (inicio) inicio = new Date(inicio);
+    if (fim) fim = new Date(fim);
+    return lista.filter(e => {
+      const d = new Date(e.data);
+      if (inicio && d < inicio) return false;
+      if (fim && d > fim) return false;
+      return true;
+    });
+  }
+
+  function agruparPorCategoria(lista, propCategoria, propValor) {
+    const map = {};
+    lista.forEach(item => {
+      const cat = item[propCategoria] || "Sem Categoria";
+      let valor = item[propValor] || 0;
+      if (typeof valor !== "number") valor = parseFloat(valor) || 0;
+      if (!map[cat]) map[cat] = 0;
+      map[cat] += valor;
+    });
+    return map;
+  }
+
+  function somaValores(lista, propValor) {
+    return lista.reduce((acc, cur) => acc + (parseFloat(cur[propValor]) || 0), 0);
+  }
+
+  function renderRelatorio() {
+    const inicio = periodoInicioEl.value;
+    const fim = periodoFimEl.value;
+    const entradasFiltradas = filtrarPorPeriodo(entradas, inicio, fim);
+    const saidasFiltradas = filtrarPorPeriodo(saidas, inicio, fim);
+
+    const receitaPorCategoria = agruparPorCategoria(entradasFiltradas, "categoria", "valor");
+    const gastosPorCategoria = agruparPorCategoria(saidasFiltradas, "categoria", "valor");
+
+    const totalReceitas = somaValores(entradasFiltradas, "valor");
+    const totalSaidas = somaValores(saidasFiltradas, "valor");
+    const saldo = totalReceitas - totalSaidas;
+
+    let periodoTexto = "";
+    if (inicio && fim) {
+      periodoTexto = `Período ${inicio} a ${fim}`;
+    } else if (inicio && !fim) {
+      periodoTexto = `A partir de ${inicio}`;
+    } else if (!inicio && fim) {
+      periodoTexto = `Até ${fim}`;
+    } else {
+      const now = new Date();
+      const m = now.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+      periodoTexto = `Mês atual (${m})`;
+    }
+
+    function criarTabela(map) {
+      let html = `<table><thead><tr><th>Categoria</th><th>Valor (R$)</th></tr></thead><tbody>`;
+      const keys = Object.keys(map).sort();
+      keys.forEach(k => {
+        html += `<tr><td>${k}</td><td>${formatCurrency(map[k])}</td></tr>`;
+      });
+      html += "</tbody></table>";
+      return html;
+    }
+
+    relatorioOutputEl.innerHTML = `
+      <h3>Relatório Financeiro</h3>
+      <p><strong>${periodoTexto}</strong></p>
+      <h4>Receitas por Categoria</h4>
+      ${criarTabela(receitaPorCategoria)}
+      <h4>Gastos por Categoria</h4>
+      ${criarTabela(gastosPorCategoria)}
+      <h4>Balanço</h4>
+      <p>Receitas Totais: <strong>${formatCurrency(totalReceitas)}</strong></p>
+      <p>Gastos Totais: <strong>${formatCurrency(totalSaidas)}</strong></p>
+      <p>Saldo: <strong style="color:${saldo>=0?'green':'red'}">${formatCurrency(saldo)}</strong></p>
+    `;
+  }
+  btnGerarRelatorio.addEventListener("click", e => {
+    e.preventDefault();
+    renderRelatorio();
+  });
+
+  renderRelatorio();
+
+})();
+</script>
+
+</body>
+</html>
