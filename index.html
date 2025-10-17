@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Financeiro Clínica Attento</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Work+Sans&display=swap" rel="stylesheet" />
+<style>
+/* ... (CSS igual ao seu, pode usar o que já forneceu no início) ... */
+</style>
+</head>
+<body>
+
+<div id="logo-container">
+  <img src="logo-attento.png" alt="Logo Clínica Attento" />
+  <div class="tagline">INSTITUTO DE SAÚDE ESPECIALIZADA</div>
+</div>
+
+<h1>Financeiro Clínica Attento</h1>
+
+<section id="investimentos">
+  <h2>Investimento Inicial e Aportes dos Sócios</h2>
+  <form id="investmentForm">
+    <div class="input-group">
+      <label for="socioName">Sócio</label>
+      <select id="socioName" required>
+        <option value="Jessica">Jessica</option>
+        <option value="Wevelin">Wevelin</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="initialInvestment">Investimento Inicial (R$)</label>
+      <input type="number" id="initialInvestment" min="0" step="0.01" placeholder="Valor inicial" />
+    </div>
+    <div class="flex-row">
+      <div class="input-group flex-grow">
+        <label for="aporteValue">Aporte Adicional (R$)</label>
+        <input type="number" id="aporteValue" min="0" step="0.01" placeholder="Novo aporte" />
+      </div>
+      <div class="input-group flex-grow">
+        <label for="aporteData">Data do Aporte</label>
+        <input type="date" id="aporteData" />
+      </div>
+    </div>
+    <button type="submit">Registrar Investimento/Aporte</button>
+  </form>
+  <h3>Resumo dos Investimentos e Aportes</h3>
+  <div id="investmentSummary"></div>
+</section>
+
+<hr />
+
+<section id="entrada-section">
+  <h2>Lançar Entrada</h2>
+  <form id="entradaForm">
+    <div class="input-group">
+      <label for="entradaCategoria">Categoria de Entrada</label>
+      <select id="entradaCategoria" required></select>
+    </div>
+    <div class="input-group hidden" id="entradaOutrasContainer">
+      <label for="entradaOutrasDescricao">Descreva outra categoria</label>
+      <input type="text" id="entradaOutrasDescricao" />
+    </div>
+    <div class="input-group">
+      <label for="entradaValor">Valor (R$)</label>
+      <input type="number" id="entradaValor" min="0" step="0.01" required />
+    </div>
+    <div class="input-group">
+      <label for="entradaData">Data</label>
+      <input type="date" id="entradaData" required />
+    </div>
+    <button type="submit">Adicionar Entrada</button>
+  </form>
+</section>
+
+<section id="saida-section">
+  <h2>Lançar Saída</h2>
+  <form id="saidaForm">
+    <div class="input-group">
+      <label for="saidaCategoria">Categoria de Saída</label>
+      <select id="saidaCategoria" required></select>
+    </div>
+    <div class="input-group" id="saidaSubcategoriaContainer" style="display:none;">
+      <label for="saidaSubcategoria">Subcategoria</label>
+      <select id="saidaSubcategoria"></select>
+      <input type="text" id="saidaSubcategoriaNova" placeholder="Nova subcategoria (opcional)" style="display:none;margin-top:6px;"/>
+      <button type="button" id="addSubcategoriaSaida" style="display:none;margin-top:6px;">Adicionar Subcategoria</button>
+    </div>
+    <div class="input-group hidden" id="saidaExtraContainer">
+      <label for="saidaExtraDescricao">Descreva a categoria</label>
+      <input type="text" id="saidaExtraDescricao" />
+    </div>
+    <div class="input-group hidden" id="saidaFuncionarioContainer">
+      <label for="saidaFuncionario">Funcionário</label>
+      <input type="text" id="saidaFuncionario" placeholder="Nome do funcionário" />
+    </div>
+    <div class="input-group hidden" id="saidaImpostoContainer">
+      <label for="saidaImposto">Imposto</label>
+      <input type="text" id="saidaImposto" placeholder="Nome do imposto" />
+    </div>
+    <div class="input-group">
+      <label for="saidaValor">Valor (R$)</label>
+      <input type="number" id="saidaValor" min="0" step="0.01" required />
+    </div>
+    <div class="input-group">
+      <label for="saidaData">Data</label>
+      <input type="date" id="saidaData" required />
+    </div>
+    <button type="submit">Adicionar Saída</button>
+  </form>
+</section>
+
+<hr />
+
+<section id="categoria-nova">
+  <h2>Categorias & Subcategorias</h2>
+  <form id="novaCategoriaForm">
+    <div class="input-group">
+      <label for="tipoCategoria">Tipo de Categoria</label>
+      <select id="tipoCategoria" required>
+        <option value="entrada">Entrada</option>
+        <option value="saida">Saída</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="nomeCategoriaNova">Nova Categoria</label>
+      <input type="text" id="nomeCategoriaNova" />
+      <button type="submit" style="display:inline-block;margin-left:12px;">Adicionar Categoria</button>
+    </div>
+  </form>
+  <div style="margin-top:18px;">
+    <h4>Editar Categorias e Subcategorias</h4>
+    <div id="editaCatBox"></div>
+  </div>
+</section>
+
+<!-- Demais seções iguais ao código atual... -->
+<!-- ... -->
+
+<script>
+(() => {
+  // Categorias agora são objetos para permitir subcategorias
+  let categoriasEntrada = JSON.parse(localStorage.getItem('attento_cat_entrada_obj_v2')) || [
+    { nome: "Salas" }, { nome: "Aporte Jessica" }, { nome: "Aporte Wevelin" },
+    { nome: "Notas Jessica" }, { nome: "Notas Wevelin" }, { nome:"Nota Attento" }, { nome: "Outras" }
+  ];
+  let categoriasSaida = JSON.parse(localStorage.getItem('attento_cat_saida_obj_v2')) || [
+    { nome: "Aluguel", sub: ["Consultório", "Auditório"] },
+    { nome: "Energia" }, { nome: "Internet" }, { nome: "Prontuário" },
+    { nome: "Salário", sub: ["Psicólogo", "Recepção"] },
+    { nome: "Impostos" }, { nome: "Condomínio" }, { nome: "Contabilidade" }, { nome: "Informática" },
+    { nome: "Papelaria" }, { nome: "Limpeza" }, { nome: "Consumo" },
+    { nome: "Extras" }
+  ];
+
+  // Investimento/apoios: [{valor, data}]
+  let investimentos = JSON.parse(localStorage.getItem('attento_investimentos_v2')) || {
+    Jessica: { inicial: 0, aportes: [] }, // aportes: [{valor, data}]
+    Wevelin: { inicial: 0, aportes: [] }
+  };
+
+  // Outras variáveis iguais...
+  let entradas = JSON.parse(localStorage.getItem('attento_entradas_v2')) || [];
+  let saidas = JSON.parse(localStorage.getItem('attento_saidas_v2')) || [];
+  // ... Demais variáveis como alugueis etc.
+
+  // Utilitários
+  function saveAllStorage() {
+    localStorage.setItem('attento_cat_entrada_obj_v2',  JSON.stringify(categoriasEntrada));
+    localStorage.setItem('attento_cat_saida_obj_v2',    JSON.stringify(categoriasSaida));
+    localStorage.setItem('attento_investimentos_v2',    JSON.stringify(investimentos));
+    localStorage.setItem('attento_entradas_v2',        JSON.stringify(entradas));
+    localStorage.setItem('attento_saidas_v2',          JSON.stringify(saidas));
+    // outros saves...
+  }
+  function formatCurrency(v) { return Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+
+  // ---------- INVESTIMENTO - com campo de data no aporte -----------
+  document.getElementById("investmentForm").onsubmit = function(e){
+    e.preventDefault();
+    const nomeSocio = document.getElementById("socioName").value;
+    const valorInicial = parseFloat(document.getElementById("initialInvestment").value) || 0;
+    const valorAporte = parseFloat(document.getElementById("aporteValue").value) || 0;
+    const dataAporte = document.getElementById("aporteData").value;
+
+    if (valorInicial > 0) investimentos[nomeSocio].inicial = valorInicial;
+
+    if (valorAporte > 0 && dataAporte) {
+      investimentos[nomeSocio].aportes.push({ valor: valorAporte, data: dataAporte });
+    } else if (valorAporte > 0 && !dataAporte) {
+      alert('Informe a data do aporte');
+      return;
+    }
+    saveAllStorage();
+    document.getElementById("investmentForm").reset();
+    renderInvestmentSummary();
+  };
+
+  function renderInvestmentSummary() {
+    let html = "";
+    for (const socio in investimentos) {
+      let inicial = investimentos[socio].inicial || 0;
+      let totalAportes = investimentos[socio].aportes.reduce((a,b) => a+(+b.valor), 0);
+      let total = inicial + totalAportes;
+      html += `<p><strong>${socio}:</strong> Investimento Inicial: ${formatCurrency(inicial)}<br>
+        Aportes: <span title="Conferir detalhes dos aportes no cadastro">${formatCurrency(totalAportes)}</span>
+        <br><strong>Total acumulado: ${formatCurrency(total)}</strong></p>`;
+    }
+    document.getElementById("investmentSummary").innerHTML = html;
+  }
+  renderInvestmentSummary();
+
+  // ------------ ENTRADA / SAÍDA -------------
+  function rebuildSelect(el, arr) {
+    el.innerHTML = "";
+    arr.forEach((c, i) => {
+      const opt = document.createElement("option");
+      opt.value = c.nome;
+      opt.textContent = c.nome;
+      el.appendChild(opt);
+    });
+  }
+
+  // ENTRADA - igual antes só sem subcategorias
+  rebuildSelect(document.getElementById("entradaCategoria"), categoriasEntrada);
+
+  // SAÍDA - com subcategoria dinâmica
+  function rebuildSaidaCategoria() {
+    const saidaCatSel = document.getElementById("saidaCategoria");
+    rebuildSelect(saidaCatSel, categoriasSaida);
+    saidaCatSel.dispatchEvent(new Event('change'));
+  }
+  rebuildSaidaCategoria();
+
+  function rebuildSaidaSubcategoria() {
+    const idx = document.getElementById("saidaCategoria").selectedIndex;
+    const cat = categoriasSaida[idx];
+    const box = document.getElementById("saidaSubcategoriaContainer");
+    const sel = document.getElementById("saidaSubcategoria");
+    const inputNova = document.getElementById("saidaSubcategoriaNova");
+    const btnAdd = document.getElementById("addSubcategoriaSaida");
+    if (cat && cat.sub) {
+      box.style.display = '';
+      sel.innerHTML = "";
+      cat.sub.forEach(s => {
+        const op = document.createElement('option');
+        op.value = s;
+        op.textContent = s;
+        sel.appendChild(op);
+      });
+      sel.style.display = '';
+      inputNova.style.display = '';
+      btnAdd.style.display = '';
+    } else {
+      box.style.display = 'none';
+    }
+  }
+  document.getElementById("saidaCategoria").addEventListener("change", rebuildSaidaSubcategoria);
+
+  // Adicionar nova subcategoria na tela "lançar saída"
+  document.getElementById("addSubcategoriaSaida").onclick = function() {
+    const idx = document.getElementById("saidaCategoria").selectedIndex;
+    const txt = document.getElementById("saidaSubcategoriaNova").value.trim();
+    if (txt && categoriasSaida[idx]) {
+      categoriasSaida[idx].sub = categoriasSaida[idx].sub || [];
+      if (!categoriasSaida[idx].sub.includes(txt)) {
+        categoriasSaida[idx].sub.push(txt);
+        saveAllStorage();
+      }
+      rebuildSaidaSubcategoria();
+      document.getElementById("saidaSubcategoriaNova").value = '';
+    }
+  };
+
+  // Lançar SAÍDA com subcategoria
+  document.getElementById("saidaForm").onsubmit = function(e){
+    e.preventDefault();
+    let categoria = document.getElementById("saidaCategoria").value;
+    let subcategoria = '';
+    const idx = categoriasSaida.findIndex(x=>x.nome===categoria);
+    if (categoriasSaida[idx] && categoriasSaida[idx].sub) {
+      subcategoria = document.getElementById("saidaSubcategoria").value || '';
+    }
+    // ... os demais campos (igual código anterior)...
+    let valor = parseFloat(document.getElementById("saidaValor").value || 0);
+    let data = document.getElementById("saidaData").value;
+    let descricaoExtra = document.getElementById("saidaExtraDescricao")?.value || '';
+    let funcionario = document.getElementById("saidaFuncionario")?.value || '';
+    let imposto = document.getElementById("saidaImposto")?.value || '';
+    // ... validações e lógica igual ...
+    if (!valor || valor <= 0) return alert("Insira um valor válido.");
+    if (!data) return alert("Informe a data.");
+    saidas.push({
+      id: Math.random().toString(36).substr(2, 9),
+      categoria,
+      subcategoria,
+      descricaoExtra,
+      funcionario,
+      imposto,
+      valor,
+      data
+    });
+    saveAllStorage();
+    document.getElementById("saidaForm").reset();
+    rebuildSaidaSubcategoria();
+    alert("Saída registrada.");
+    // ... atualizar relatórios ...
+  };
+
+  // --------- Edição de categoria e subcategoria ("Categoria-nova" box) ----------
+  function renderEditaCatBox() {
+    let edita = `<table style="font-size:0.88em;width:100%"><tr>
+    <th>Tipo</th><th>Categoria</th><th>Subcategorias</th><th>Editar</th></tr>`;
+    categoriasEntrada.forEach((c, i) => {
+      edita += `<tr>
+      <td>Entrada</td>
+      <td><input style="width:120px" value="${c.nome}" onchange="window.editaCat('entrada',${i},this.value)" /></td>
+      <td>-</td>
+      <td><button onclick="window.removeCat('entrada',${i})">Excluir</button></td></tr>`;
+    });
+    categoriasSaida.forEach((c, i) => {
+      edita += `<tr>
+      <td>Saída</td>
+      <td><input style="width:120px" value="${c.nome}" onchange="window.editaCat('saida',${i},this.value)" /></td>
+      <td>
+        ${(c.sub||[]).map( (sc, j) => `
+          <span>${sc} 
+            <button style="font-size:0.85em;" onclick="window.removeSubcat(${i},${j});return false;">x</button>
+            <input value="${sc}" style="width:90px;font-size:0.9em;" onchange="window.editSubcat(${i},${j},this.value)" />
+          </span>`).join('<br>')}
+        <br>
+        <input style="width:90px" placeholder="Nova subcat..." id="addSC${i}" />
+        <button onclick="window.addSubcat(${i});return false;">Add</button>
+      </td>
+      <td><button onclick="window.removeCat('saida',${i})">Excluir</button></td></tr>`;
+    });
+    edita += '</table>';
+    document.getElementById("editaCatBox").innerHTML = edita;
+  }
+  window.addSubcat = function(idx) {
+    let v = document.getElementById("addSC"+idx).value.trim();
+    if (v) {
+      categoriasSaida[idx].sub = categoriasSaida[idx].sub || [];
+      if (!categoriasSaida[idx].sub.includes(v)) categoriasSaida[idx].sub.push(v);
+      document.getElementById("addSC"+idx).value = '';
+      saveAllStorage(); rebuildSaidaCategoria(); renderEditaCatBox();
+    }
+  }
+  window.removeSubcat = function(idx, jdx) {
+    categoriasSaida[idx].sub.splice(jdx, 1);
+    saveAllStorage(); rebuildSaidaCategoria(); renderEditaCatBox();
+  }
+  window.editSubcat = function(idx, jdx, v) {
+    categoriasSaida[idx].sub[jdx] = v;
+    saveAllStorage(); rebuildSaidaCategoria(); renderEditaCatBox();
+  }
+  window.editaCat = function(tipo, idx, val) {
+    if (tipo==='entrada') categoriasEntrada[idx].nome = val;
+    else categoriasSaida[idx].nome = val;
+    saveAllStorage(); rebuildSaidaCategoria(); renderEditaCatBox();
+  }
+  window.removeCat = function(tipo, idx) {
+    if (tipo==='entrada') categoriasEntrada.splice(idx,1);
+    else categoriasSaida.splice(idx,1);
+    saveAllStorage(); rebuildSaidaCategoria(); renderEditaCatBox();
+  };
+
+  // "Nova Categoria" form
+  document.getElementById("novaCategoriaForm").onsubmit = function(e){
+    e.preventDefault();
+    let tipo = document.getElementById("tipoCategoria").value;
+    let nome = document.getElementById("nomeCategoriaNova").value.trim();
+    if (!nome) return alert("Insira um nome para a categoria.");
+    if (tipo === "entrada") {
+      if (!categoriasEntrada.find(c=>c.nome===nome)) {
+        categoriasEntrada.push({nome});
+      }
+      saveAllStorage(); rebuildSelect(document.getElementById("entradaCategoria"),categoriasEntrada);
+    } else if (tipo === "saida") {
+      if (!categoriasSaida.find(c=>c.nome===nome)) {
+        categoriasSaida.push({nome, sub:[]});
+      }
+      saveAllStorage(); rebuildSaidaCategoria();
+    }
+    document.getElementById("nomeCategoriaNova").value = "";
+    renderEditaCatBox();
+  };
+
+  // Inicialização
+  renderEditaCatBox();
+
+  // Outras funções/telas permanecem como antes...
+})();
+</script>
+
+</body>
+</html>
