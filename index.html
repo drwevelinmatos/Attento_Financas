@@ -4,28 +4,27 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Financeiro Clínica Attento</title>
-<!-- Fonts as per manual: Montserrat and Work Sans -->
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Work+Sans&display=swap" rel="stylesheet" />
 <style>
-  :root { --verde-claro: #aaccbe; --cinza-escuro: #575755; --degrade-gold-start: #d4af37; --degrade-gold-end: #b8860b; }
-  body { font-family: 'Work Sans', Arial, sans-serif; margin: 20px; background: #f7f7f7; color: var(--cinza-escuro); }
+  :root { --verde-claro: #aaccbe; --cinza-escuro: #575755; }
+  body { font-family: 'Work Sans', Arial, sans-serif; margin: 20px; background: #f7f7f7; color: var(--cinza-escuro);}
   h1, h2, h3 { font-family: 'Montserrat', sans-serif; color: var(--cinza-escuro); }
-  section { background: white; padding: 20px 25px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.07); }
+  section { background: white; padding: 20px 25px; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.07);}
   label { display: block; margin: 10px 0 6px; font-weight: 600;}
-  input, select, textarea { width: 100%; padding: 7px; border: 1.5px solid var(--verde-claro); border-radius: 6px; font-size: 1rem; background: #fafafa; color: var(--cinza-escuro); }
-  button { margin-top: 8px; background: linear-gradient(135deg, var(--degrade-gold-start), var(--degrade-gold-end)); color: #fff; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 600; font-size: 1rem; cursor: pointer;}
-  button:hover { background: linear-gradient(135deg, var(--degrade-gold-end), var(--degrade-gold-start));}
-  table { border-collapse: collapse; width: 100%; margin-top: 10px;}
-  th, td { border: 1.2px solid var(--verde-claro); padding: 8px 12px; text-align: left; color: var(--cinza-escuro);}
+  input, select, textarea { width: 100%; padding:7px; border: 1.5px solid var(--verde-claro); border-radius: 6px; font-size: 1rem; background: #fafafa; color: var(--cinza-escuro);}
+  button { margin-top:8px; background: var(--verde-claro); color:#fff; border:none; padding:10px 16px; border-radius:6px; font-weight:600; font-size:1rem; cursor:pointer;}
+  button:hover { background: #86b6a4;}
+  table { border-collapse:collapse; width:100%; margin-top:10px;}
+  th,td { border: 1.2px solid var(--verde-claro); padding:8px 12px;}
   th { background: var(--verde-claro);}
-  .input-row { display:flex; gap:16px; }
+  .input-row { display:flex; gap:16px }
   .input-row > div { flex:1; }
-  .subcat-list { font-size:0.92em; color:#666;}
   .hidden { display:none; }
-  .small-btn { font-size:0.93em; padding:3px 8px;}
-  #logo-container { text-align: center; margin-bottom: 30px; }
-  #logo-container img { max-width: 140px; }
-  #logo-container .tagline { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; color: var(--verde-claro);}
+  #logo-container { text-align:center; margin-bottom:30px;}
+  #logo-container img { max-width:140px; }
+  #logo-container .tagline {font-family:'Montserrat',sans-serif;font-weight:600;font-size:1rem;color:var(--verde-claro);}
+  .small-btn {font-size:0.93em;padding:3px 8px;}
+  .anotacao-row {background: #f7f7f7; padding: 8px; margin-top:8px;}
 </style>
 </head>
 <body>
@@ -66,30 +65,34 @@
   <div id="investmentSummary"></div>
 </section>
 
-<section id="categorias">
-  <h2>Criar e Editar Categorias/Subcategorias</h2>
-  <form id="categoriaForm">
-    <div class="input-row">
-      <div>
-        <label for="tipoCategoria">Tipo</label>
-        <select id="tipoCategoria">
-          <option value="entrada">Entrada</option>
-          <option value="saida">Saída</option>
-        </select>
+<section>
+  <button id="btnCategorias">Categorias</button>
+  <div id="categoriasBox" class="hidden">
+    <h2>Criar/Editar Categoria e Subcategoria</h2>
+    <form id="categoriaForm">
+      <div class="input-row">
+        <div>
+          <label for="tipoCategoria">Tipo</label>
+          <select id="tipoCategoria">
+            <option value="entrada">Entrada</option>
+            <option value="saida">Saída</option>
+          </select>
+        </div>
+        <div>
+          <label for="nomeCategoriaNova">Categoria</label>
+          <input type="text" id="nomeCategoriaNova" required>
+        </div>
+        <div>
+          <label for="subCategoriaNova">Subcategoria (opcional)</label>
+          <input type="text" id="subCategoriaNova">
+        </div>
       </div>
-      <div>
-        <label for="nomeCategoriaNova">Categoria</label>
-        <input type="text" id="nomeCategoriaNova" required>
-      </div>
-      <div>
-        <label for="subCategoriaNova">Subcategoria (opcional)</label>
-        <input type="text" id="subCategoriaNova">
-      </div>
-    </div>
-    <button type="submit">Adicionar</button>
-  </form>
-  <h3>Categorias Existentes</h3>
-  <div id="categoriasList"></div>
+      <button type="submit">Adicionar</button>
+    </form>
+    <h3>Categorias Existentes</h3>
+    <div id="categoriasList"></div>
+    <button onclick="document.getElementById('categoriasBox').classList.add('hidden')">Fechar</button>
+  </div>
 </section>
 
 <section id="entrada-section">
@@ -162,10 +165,29 @@
         <label for="dataInicioAluguel">Data de Início</label>
         <input type="date" id="dataInicioAluguel" required />
       </div>
+      <div>
+        <label for="dataEncerramentoAluguel">Data de Encerramento</label>
+        <input type="date" id="dataEncerramentoAluguel" />
+      </div>
     </div>
-    <label for="anotacoesAluguel">Anotações Extras</label>
-    <textarea id="anotacoesAluguel" rows="2"></textarea>
     <button type="submit">Salvar</button>
+  </form>
+  <form id="anotacaoAluguelForm" class="hidden">
+    <h3>Anotações Extras</h3>
+    <input type="hidden" id="idxAluguel"/>
+    <div class="input-row">
+      <div>
+        <label for="dataAnotacao">Data</label>
+        <input type="date" id="dataAnotacao" required>
+      </div>
+      <div>
+        <label for="textoAnotacao">Texto</label>
+        <input type="text" id="textoAnotacao" required>
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button type="submit">Salvar</button>
+      </div>
+    </div>
   </form>
   <h3>Profissionais Cadastrados</h3>
   <div id="listaProfissionais"></div>
@@ -184,12 +206,12 @@
         <input type="date" id="relatoFim" required>
       </div>
       <div>
-        <label for="tipoRelatorio">Tipo</label>
+        <label for="tipoRelatorio">Tipo de Relatório</label>
         <select id="tipoRelatorio">
-          <option value="balanco">Balanço</option>
-          <option value="entradas">Entradas</option>
-          <option value="saidas">Saídas</option>
-          <option value="aluguel">Aluguel</option>
+          <option value="balanco">Balanço Geral</option>
+          <option value="aporte">Aporte por Sócio</option>
+          <option value="entrada">Por Categoria (Entradas)</option>
+          <option value="saida">Por Categoria (Saídas)</option>
         </select>
       </div>
       <div style="display:flex;align-items:flex-end;">
@@ -197,36 +219,79 @@
       </div>
     </div>
   </form>
+  <div id="relat"></div>
 </section>
 
 <script>
 (() => {
-  // ------------------------- DADOS BASE -------------------------
-  // Arrays dinâmicos de categorias { tipo, categoria, subcategorias: [] }
-  let categorias = JSON.parse(localStorage.getItem('attento_categorias_v3')) || [
+  // ---------- DADOS BASE ----------
+  let categorias = JSON.parse(localStorage.getItem('attento_categorias_v4')) || [
     { tipo:"entrada", categoria:"Aporte", subcategorias:["Jessica","Wevelin"] },
     { tipo:"entrada", categoria:"Notas", subcategorias:["Jessica","Wevelin"] },
-    { tipo:"saida",   categoria:"Funcionario", subcategorias:["Karina","Leila"] },
-    { tipo:"saida",   categoria:"Aluguel", subcategorias:["Consultório","Auditório"] }
+    { tipo:"saida", categoria:"Funcionario", subcategorias:["Karina","Leila"] },
+    { tipo:"saida", categoria:"Aluguel", subcategorias:["Consultório","Auditório"] }
   ];
-  let investimentos = JSON.parse(localStorage.getItem('attento_investimentos_v3')) || [];
-  let entradas = JSON.parse(localStorage.getItem('attento_entradas_v3')) || [];
-  let saidas = JSON.parse(localStorage.getItem('attento_saidas_v3')) || [];
-  let alugueis = JSON.parse(localStorage.getItem('attento_alugueis_v3')) || [];
+  let investimentos = JSON.parse(localStorage.getItem('attento_investimentos_v4')) || [];
+  let entradas = JSON.parse(localStorage.getItem('attento_entradas_v4')) || [];
+  let saidas = JSON.parse(localStorage.getItem('attento_saidas_v4')) || [];
+  let alugueis = JSON.parse(localStorage.getItem('attento_alugueis_v4')) || [];
 
-  // ------------------------- FUNÇÕES ÚTEIS -------------------------
   function saveAll() {
-    localStorage.setItem('attento_categorias_v3', JSON.stringify(categorias));
-    localStorage.setItem('attento_investimentos_v3', JSON.stringify(investimentos));
-    localStorage.setItem('attento_entradas_v3', JSON.stringify(entradas));
-    localStorage.setItem('attento_saidas_v3', JSON.stringify(saidas));
-    localStorage.setItem('attento_alugueis_v3', JSON.stringify(alugueis));
+    localStorage.setItem('attento_categorias_v4', JSON.stringify(categorias));
+    localStorage.setItem('attento_investimentos_v4', JSON.stringify(investimentos));
+    localStorage.setItem('attento_entradas_v4', JSON.stringify(entradas));
+    localStorage.setItem('attento_saidas_v4', JSON.stringify(saidas));
+    localStorage.setItem('attento_alugueis_v4', JSON.stringify(alugueis));
   }
-  function formatCurrency(v) {return (+v||0).toLocaleString('pt-BR', { style:'currency', currency:'BRL'});}
-  function genId() {return Math.random().toString(36).substr(2,9);}
-  function formatDate(date) {return date?new Date(date).toISOString().split('T')[0]:"";}
+  function formatCurrency(v){return (+v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
+  function formatDate(date){return date?new Date(date).toLocaleDateString("pt-BR"):"";}
+  function genId(){return Math.random().toString(36).substr(2,9);}
 
-  // ------------------------- INVESTIMENTO -------------------------
+  // ---------- BOX CATEGORIAS ----------
+  document.getElementById("btnCategorias").onclick = function(){
+    document.getElementById("categoriasBox").classList.remove("hidden");
+  };
+  document.getElementById("categoriaForm").onsubmit = function(e){
+    e.preventDefault();
+    let tipo = document.getElementById("tipoCategoria").value;
+    let cat = document.getElementById("nomeCategoriaNova").value.trim();
+    let subcat = document.getElementById("subCategoriaNova").value.trim();
+    if (!cat) return alert('Categoria obrigatória');
+    let categoriaObj = categorias.find(x=>x.tipo===tipo && x.categoria===cat);
+    if(!categoriaObj){categoriaObj={tipo:tipo,categoria:cat,subcategorias:[]};categorias.push(categoriaObj)}
+    if (subcat && !categoriaObj.subcategorias.includes(subcat)) categoriaObj.subcategorias.push(subcat);
+    saveAll(); renderCategoriasList(); renderCategoriaSelects(); e.target.reset();
+  };
+  function renderCategoriasList() {
+    let html = '<table><thead><tr><th>Tipo</th><th>Categoria</th><th>Subcategorias</th><th></th></tr></thead><tbody>';
+    categorias.forEach((cat,i)=>{
+      html += `<tr>
+        <td>${cat.tipo}</td>
+        <td>${cat.categoria}</td>
+        <td>
+          ${cat.subcategorias.map((sub,j)=>`${sub}<button class="small-btn" onclick="window.delSubcat(${i},${j})">x</button>`).join(', ')}
+          <input class="small-input" id="insSub${i}" placeholder="Nova" style="width:60px;">
+          <button onclick="window.addSubcat(${i})">Add</button>
+        </td>
+        <td>
+          <button class="small-btn" onclick="window.delCategoria(${i})">Excluir</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById("categoriasList").innerHTML = html;
+  }
+  window.delCategoria=function(idx){categorias.splice(idx,1);saveAll();renderCategoriasList();renderCategoriaSelects();}
+  window.addSubcat=function(idx){
+    let v=document.getElementById("insSub"+idx).value.trim();
+    if(v && !categorias[idx].subcategorias.includes(v)){
+      categorias[idx].subcategorias.push(v); saveAll(); renderCategoriasList(); renderCategoriaSelects();
+    }
+  }
+  window.delSubcat=function(i,j){categorias[i].subcategorias.splice(j,1);saveAll();renderCategoriasList();renderCategoriaSelects();}
+  renderCategoriasList();
+
+  // ---------- BOX INVESTIMENTO/APORTES ----------
   document.getElementById("investmentForm").onsubmit = function(e){
     e.preventDefault();
     const nomeSocio = document.getElementById("socioName").value.trim();
@@ -234,10 +299,10 @@
     const valorAporte = parseFloat(document.getElementById("aporteValue").value) || 0;
     const dataAporte = document.getElementById("aporteData").value;
     let inv = investimentos.find(x=>x.socio===nomeSocio);
-    if (!inv) { inv = {socio:nomeSocio, inicial:0, aportes:[]}; investimentos.push(inv);}
+    if (!inv) {inv={socio:nomeSocio,inicial:0,aportes:[]};investimentos.push(inv);}
     if (valorInicial > 0) inv.inicial = valorInicial;
     if (valorAporte > 0 && dataAporte) inv.aportes.push({valor:valorAporte,data:dataAporte});
-    else if (valorAporte > 0 && !dataAporte) { alert('Informe a data do aporte'); return;}
+    else if (valorAporte > 0 && !dataAporte) {alert('Informe a data do aporte');return;}
     saveAll(); this.reset(); renderInvestmentSummary();
   };
   function renderInvestmentSummary() {
@@ -246,90 +311,41 @@
       let totalAportes = x.aportes.reduce((a,b)=>a+parseFloat(b.valor)||0,0);
       let total = (parseFloat(x.inicial)||0) + totalAportes;
       html += `<p><strong>${x.socio}:</strong> Inicial: ${formatCurrency(x.inicial||0)}<br>
-        Aportes: ${formatCurrency(totalAportes)}<br>
-        <strong>Total: ${formatCurrency(total)}</strong></p>`;
+      Aportes: ${formatCurrency(totalAportes)}
+      <br><strong>Total: ${formatCurrency(total)}</strong></p>`;
     });
     document.getElementById("investmentSummary").innerHTML = html;
   }
   renderInvestmentSummary();
 
-  // ------------------------- CATEGORIAS -------------------------
-  document.getElementById("categoriaForm").onsubmit = function(e){
-    e.preventDefault();
-    let tipo = document.getElementById("tipoCategoria").value;
-    let cat = document.getElementById("nomeCategoriaNova").value.trim();
-    let subcat = document.getElementById("subCategoriaNova").value.trim();
-    if (!cat) return alert('Categoria obrigatória');
-    let categoriaObj = categorias.find(x=>x.tipo===tipo && x.categoria===cat);
-    if(!categoriaObj) {
-      categoriaObj = {tipo:tipo, categoria:cat, subcategorias:[]};
-      categorias.push(categoriaObj);
-    }
-    if (subcat && !categoriaObj.subcategorias.includes(subcat))
-      categoriaObj.subcategorias.push(subcat);
-    saveAll(); renderCategoriasList(); renderCategoriaSelects();
-    e.target.reset();
-  };
-  function renderCategoriasList() {
-    let html = '<table><thead><tr><th>Tipo</th><th>Categoria</th><th>Subcategorias</th><th></th></tr></thead><tbody>';
-    categorias.forEach((cat,i)=>{
-      html += `<tr>
-      <td>${cat.tipo}</td>
-      <td>${cat.categoria}</td>
-      <td class="subcat-list">
-        ${cat.subcategorias.map((sub,j)=>`${sub}<button class="small-btn" onclick="window.delSubcat(${i},${j})">x</button>`).join(', ')}
-        <input class="small-input" id="insSub${i}" placeholder="Nova" style="width:60px;">
-        <button onclick="window.addSubcat(${i})">Add</button>
-      </td>
-      <td>
-        <button class="small-btn" onclick="window.delCategoria(${i})">Excluir</button>
-      </td></tr>`;
-    });
-    html += '</tbody></table>';
-    document.getElementById("categoriasList").innerHTML = html;
-  }
-  window.delCategoria=function(idx){ categorias.splice(idx,1); saveAll(); renderCategoriasList(); renderCategoriaSelects();}
-  window.addSubcat=function(idx){
-    let v=document.getElementById("insSub"+idx).value.trim();
-    if(v && !categorias[idx].subcategorias.includes(v)){
-      categorias[idx].subcategorias.push(v); saveAll(); renderCategoriasList(); renderCategoriaSelects();
-    }
-  }
-  window.delSubcat=function(i,j){ categorias[i].subcategorias.splice(j,1); saveAll(); renderCategoriasList(); renderCategoriaSelects(); }
-  renderCategoriasList();
-
-  // ------------------------- CAIXA ENTRADA/SAÍDA -------------------------
-  function renderCategoriaSelects() {
+  // ---------- LANÇAMENTO ENTRADA/SAÍDA ----------
+  function renderCategoriaSelects(){
     let entradaSel = document.getElementById("entradaCategoria");
-    entradaSel.innerHTML = categorias.filter(x=>x.tipo==="entrada").map(x=>`<option value="${x.categoria}">${x.categoria}</option>`).join('');
+    entradaSel.innerHTML = categorias.filter(x=>x.tipo=="entrada").map(x=>`<option value="${x.categoria}">${x.categoria}</option>`).join('');
     entradaSel.dispatchEvent(new Event('change'));
 
     let saidaSel = document.getElementById("saidaCategoria");
-    saidaSel.innerHTML = categorias.filter(x=>x.tipo==="saida").map(x=>`<option value="${x.categoria}">${x.categoria}</option>`).join('');
+    saidaSel.innerHTML = categorias.filter(x=>x.tipo=="saida").map(x=>`<option value="${x.categoria}">${x.categoria}</option>`).join('');
     saidaSel.dispatchEvent(new Event('change'));
   }
   renderCategoriaSelects();
-
-  function atualizarEntradaSubcat() {
+  function atualizarEntradaSubcat(){
     let cat = document.getElementById("entradaCategoria").value;
-    let obj = categorias.find(x=>x.tipo==="entrada" && x.categoria===cat);
+    let obj = categorias.find(x=>x.tipo=="entrada"&&x.categoria==cat);
     let sel = document.getElementById("entradaSubcategoria");
-    sel.innerHTML = obj && obj.subcategorias.length 
-      ? obj.subcategorias.map(s=>`<option value="${s}">${s}</option>`).join('')
-      : '<option value="">-</option>';
+    sel.innerHTML = obj && obj.subcategorias.length?
+      obj.subcategorias.map(s=>`<option value="${s}">${s}</option>`).join(''): '<option value="">-</option>';
   }
-  function atualizarSaidaSubcat() {
+  function atualizarSaidaSubcat(){
     let cat = document.getElementById("saidaCategoria").value;
-    let obj = categorias.find(x=>x.tipo==="saida" && x.categoria===cat);
+    let obj = categorias.find(x=>x.tipo=="saida"&&x.categoria==cat);
     let sel = document.getElementById("saidaSubcategoria");
-    sel.innerHTML = obj && obj.subcategorias.length 
-      ? obj.subcategorias.map(s=>`<option value="${s}">${s}</option>`).join('')
-      : '<option value="">-</option>';
+    sel.innerHTML = obj && obj.subcategorias.length?
+      obj.subcategorias.map(s=>`<option value="${s}">${s}</option>`).join(''): '<option value="">-</option>';
   }
   document.getElementById("entradaCategoria").addEventListener("change", atualizarEntradaSubcat);
   document.getElementById("saidaCategoria").addEventListener("change", atualizarSaidaSubcat);
 
-  // ENTRADA
   document.getElementById("entradaForm").onsubmit = function(e){
     e.preventDefault();
     let categoria = document.getElementById("entradaCategoria").value;
@@ -340,7 +356,6 @@
     entradas.push({id:genId(),categoria,subcategoria,valor,data});
     saveAll(); this.reset(); alert('Entrada registrada!');
   };
-  // SAÍDA
   document.getElementById("saidaForm").onsubmit = function(e){
     e.preventDefault();
     let categoria = document.getElementById("saidaCategoria").value;
@@ -349,19 +364,23 @@
     let data = document.getElementById("saidaData").value;
     if (!valor || !data) return alert('Preencha o valor e data corretamente');
     saidas.push({id:genId(),categoria,subcategoria,valor,data});
-    saveAll(); this.reset(); alert('Saída registrada!')
+    saveAll(); this.reset(); alert('Saída registrada!');
   };
 
-  // ---------- CONTROLE DE ALUGUEL (CRUD + Anotações extras) -------------------
+  // ---------- CONTROLE DE ALUGUEL (Nova lógica para anotações com data) ----------
   function renderAlugueis() {
-    let html='<table><thead><tr><th>Profissional</th><th>Períodos</th><th>Valor Mensal</th><th>Início</th><th>Anotações</th><th>Ações</th></tr></thead><tbody>';
+    let html='<table><thead><tr><th>Profissional</th><th>Períodos</th><th>Valor Mensal</th><th>Início</th><th>Encerramento</th><th>Anotações</th><th>Ações</th></tr></thead><tbody>';
     alugueis.forEach((a,i)=>{
       html+=`<tr>
         <td>${a.profissional}</td>
         <td>${a.periodosSemana}</td>
         <td>${formatCurrency(a.valorMensal)}</td>
         <td>${formatDate(a.dataInicio)}</td>
-        <td>${(a.anotacoes||"").replace(/\n/g,"<br>")}</td>
+        <td>${a.dataEncerramento?formatDate(a.dataEncerramento):'-'}</td>
+        <td>
+          ${(a.anotacoes||[]).map(ant=>`<div class="anotacao-row">${formatDate(ant.data)}: ${ant.texto}</div>`).join('')}
+          <button onclick="window.adicionarAnotacaoAluguel(${i})">Nova anotação</button>
+        </td>
         <td>
           <button class="small-btn" onclick="window.editAluguel(${i})">Editar</button>
           <button class="small-btn" onclick="window.delAluguel(${i})">Excluir</button>
@@ -370,46 +389,91 @@
     });
     html+='</tbody></table>';
     document.getElementById("listaProfissionais").innerHTML = html;
+    document.getElementById("anotacaoAluguelForm").classList.add("hidden");
   }
-  window.editAluguel=function(idx) {
+  window.editAluguel=function(idx){
     const a = alugueis[idx];
-    document.getElementById("profissionalNome").value = a.profissional;
-    document.getElementById("periodosSemana").value = a.periodosSemana;
-    document.getElementById("valorMensal").value = a.valorMensal;
-    document.getElementById("dataInicioAluguel").value = a.dataInicio;
-    document.getElementById("anotacoesAluguel").value = a.anotacoes||"";
-    window.aluguelEditando = idx;
+    document.getElementById("profissionalNome").value=a.profissional;
+    document.getElementById("periodosSemana").value=a.periodosSemana;
+    document.getElementById("valorMensal").value=a.valorMensal;
+    document.getElementById("dataInicioAluguel").value=a.dataInicio;
+    document.getElementById("dataEncerramentoAluguel").value=a.dataEncerramento||"";
+    window.aluguelEditando=idx;
   }
-  window.delAluguel = function(idx){ alugueis.splice(idx,1); saveAll(); renderAlugueis();}
+  window.delAluguel=function(idx){alugueis.splice(idx,1);saveAll();renderAlugueis();}
   document.getElementById("aluguelForm").onsubmit=function(e){
     e.preventDefault();
-    let prof = document.getElementById("profissionalNome").value.trim();
-    let periodos = document.getElementById("periodosSemana").value.trim();
-    let valor = parseFloat(document.getElementById("valorMensal").value)||0;
-    let dataInicio = document.getElementById("dataInicioAluguel").value;
-    let anotacoes = document.getElementById("anotacoesAluguel").value;
-    if (!prof || !periodos || !dataInicio) return alert('Preencha todos os campos obrigatórios');
-    const reg = {profissional:prof, periodosSemana:periodos, valorMensal:valor, dataInicio:dataInicio, anotacoes:anotacoes};
-    if (typeof window.aluguelEditando === "number") {
-      alugueis[window.aluguelEditando] = reg;
-      window.aluguelEditando = undefined;
-    } else { alugueis.push(reg);}
+    let a = {
+      profissional:document.getElementById("profissionalNome").value.trim(),
+      periodosSemana:document.getElementById("periodosSemana").value.trim(),
+      valorMensal:parseFloat(document.getElementById("valorMensal").value)||0,
+      dataInicio:document.getElementById("dataInicioAluguel").value,
+      dataEncerramento:document.getElementById("dataEncerramentoAluguel").value||undefined,
+      anotacoes: (typeof window.aluguelEditando==="number" && alugueis[window.aluguelEditando])?alugueis[window.aluguelEditando].anotacoes:[] };
+    if(!a.profissional || !a.periodosSemana || !a.dataInicio) return alert('Preencha todos os campos obrigatórios');
+    if(typeof window.aluguelEditando==="number") {alugueis[window.aluguelEditando]=a; window.aluguelEditando=undefined;}
+    else alugueis.push(a);
     saveAll(); this.reset(); renderAlugueis();
   };
+  window.adicionarAnotacaoAluguel=function(idx){
+    document.getElementById("anotacaoAluguelForm").classList.remove("hidden");
+    document.getElementById("idxAluguel").value=idx;
+  }
+  document.getElementById("anotacaoAluguelForm").onsubmit=function(e){
+    e.preventDefault();
+    let idx=parseInt(document.getElementById("idxAluguel").value,10);
+    let data=document.getElementById("dataAnotacao").value;
+    let texto=document.getElementById("textoAnotacao").value.trim();
+    if(!data||!texto)return alert('Preencha data e texto');
+    alugueis[idx].anotacoes=alugueis[idx].anotacoes||[];
+    alugueis[idx].anotacoes.push({data,data,texto});
+    saveAll(); this.reset(); renderAlugueis();
+  }
   renderAlugueis();
 
-  // -------------- RELATÓRIO/BALANÇO -----------------
+  // ---------- RELATÓRIOS NOVOS ----------
   document.getElementById("relatorioForm").onsubmit = function(e){
     e.preventDefault();
     let dtini = document.getElementById("relatoInicio").value;
     let dtfim = document.getElementById("relatoFim").value;
     let tipo = document.getElementById("tipoRelatorio").value;
-    localStorage.setItem('attento_relatorio_filtro',JSON.stringify({dtini,dtfim,tipo}));
-    window.open("relatorio-balanco-attento.html","_blank");
+    let html = '';
+    function filtroDatas(arr){
+      return arr.filter(x=>{
+        let d = new Date(x.data||x.dataInicio||x.dataEncerramento);
+        let di = new Date(dtini), df = new Date(dtfim);
+        return (!dtini||d>=di) && (!dtfim||d<=df);
+      }); }
+    if(tipo=="aporte"){
+      html='<h3>Relatório de Aportes</h3><table><tr><th>Sócio</th><th>Valor</th><th>Data</th></tr>';
+      investimentos.forEach(x=>x.aportes.filter(y=>{
+        let d = new Date(y.data), di=new Date(dtini), df=new Date(dtfim);
+        return (!dtini||d>=di)&&(!dtfim||d<=df);
+      }).forEach(y=>{
+        html += `<tr><td>${x.socio}</td><td>${formatCurrency(y.valor)}</td><td>${formatDate(y.data)}</td></tr>`;
+      }));
+      html+='</table>';
+    } else if(tipo=="entrada"){
+      let dados=filtroDatas(entradas);
+      html='<h3>Entradas por Categoria</h3><table><tr><th>Categoria</th><th>Subcategoria</th><th>Valor</th><th>Data</th></tr>';
+      dados.forEach(x=>{html+=`<tr><td>${x.categoria}</td><td>${x.subcategoria}</td><td>${formatCurrency(x.valor)}</td><td>${formatDate(x.data)}</td></tr>`;});
+      html+='</table>';
+    } else if(tipo=="saida"){
+      let dados=filtroDatas(saidas);
+      html='<h3>Saídas por Categoria</h3><table><tr><th>Categoria</th><th>Subcategoria</th><th>Valor</th><th>Data</th></tr>';
+      dados.forEach(x=>{html+=`<tr><td>${x.categoria}</td><td>${x.subcategoria}</td><td>${formatCurrency(x.valor)}</td><td>${formatDate(x.data)}</td></tr>`;});
+      html+='</table>';
+    } else {
+      let e=filtroDatas(entradas),s=filtroDatas(saidas);
+      let totE = e.reduce((a,b)=>a+(+b.valor||0),0), totS = s.reduce((a,b)=>a+(+b.valor||0),0);
+      html = `<h3>Balanço Geral</h3>
+        <p>Entradas: <strong>${formatCurrency(totE)}</strong></p>
+        <p>Saídas: <strong>${formatCurrency(totS)}</strong></p>
+        <p style="font-size:1.1em;">Saldo: <strong style="color:${totE-totS>=0?'green':'red'}">${formatCurrency(totE-totS)}</strong></p>`;
+    }
+    document.getElementById("relat").innerHTML = html;
   };
-
 })();
 </script>
-
 </body>
 </html>
