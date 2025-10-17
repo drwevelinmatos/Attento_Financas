@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Relatório/Balanço Clínica Attento</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Work+Sans&display=swap" rel="stylesheet" />
+<style>
+  body { font-family: 'Work Sans', Arial, sans-serif; background: #f7f7f7; color: #575755; padding:30px;}
+  h1,h2 { font-family:'Montserrat',sans-serif;}
+  table {border-collapse:collapse;width:100%;margin-top:18px;} th,td{border:1px solid #aaccbe;padding:8px;}
+  th {background:#aaccbe;}
+</style>
+</head>
+<body>
+<h1>Relatório / Balanço</h1>
+<div id="relat"></div>
+<script>
+(() => {
+  function formatCurrency(v){return (+v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
+  function formatDate(d){return d?new Date(d).toISOString().split('T')[0]:"";}
+  let filtro = JSON.parse(localStorage.getItem('attento_relatorio_filtro')||"{}");
+  let investimento = JSON.parse(localStorage.getItem('attento_investimentos_v3')||"[]");
+  let entradas = JSON.parse(localStorage.getItem('attento_entradas_v3')||"[]");
+  let saidas = JSON.parse(localStorage.getItem('attento_saidas_v3')||"[]");
+  let alugueis = JSON.parse(localStorage.getItem('attento_alugueis_v3')||"[]");
+
+  let dtini = filtro.dtini, dtfim=filtro.dtfim;
+
+  function filtroDatas(arr){ return arr.filter(a=>{
+    let d = new Date(a.data||a.dataInicio), di = new Date(dtini), df = new Date(dtfim);
+    return (!dtini || d>=di) && (!dtfim || d<=df);
+  })}
+
+  let html='';
+  if (filtro.tipo=="balanco"||!filtro.tipo) {
+    let e = filtroDatas(entradas), s = filtroDatas(saidas);
+    let totE = e.reduce((a,b)=>a+(+b.valor||0),0), totS = s.reduce((a,b)=>a+(+b.valor||0),0);
+    html+=`<h2>Balanço</h2>
+    <p>Entradas: <strong>${formatCurrency(totE)}</strong></p>
+    <p>Saídas: <strong>${formatCurrency(totS)}</strong></p>
+    <p style="font-size:1.2em;">Saldo: <strong style="color:${totE-totS>=0?'green':'red'}">${formatCurrency(totE-totS)}</strong></p>`;
+  } else if (filtro.tipo=="entradas") {
+    let e=filtroDatas(entradas);
+    html+='<h2>Entradas</h2><table><tr><th>Categoria</th><th>Sub</th><th>Valor</th><th>Data</th></tr>'+e.map(x=>`<tr><td>${x.categoria}</td><td>${x.subcategoria}</td><td>${formatCurrency(x.valor)}</td><td>${formatDate(x.data)}</td></tr>`).join('')+'</table>';
+  } else if (filtro.tipo=="saidas") {
+    let s=filtroDatas(saidas);
+    html+='<h2>Saídas</h2><table><tr><th>Categoria</th><th>Sub</th><th>Valor</th><th>Data</th></tr>'+s.map(x=>`<tr><td>${x.categoria}</td><td>${x.subcategoria}</td><td>${formatCurrency(x.valor)}</td><td>${formatDate(x.data)}</td></tr>`).join('')+'</table>';
+  } else if (filtro.tipo=="aluguel") {
+    let a=filtroDatas(alugueis);
+    html+='<h2>Aluguéis</h2><table><tr><th>Profissional</th><th>Períodos</th><th>Valor</th><th>Início</th><th>Anotações</th></tr>'+a.map(x=>`<tr><td>${x.profissional}</td><td>${x.periodosSemana}</td><td>${formatCurrency(x.valorMensal)}</td><td>${formatDate(x.dataInicio)}</td><td>${(x.anotacoes||"").replace(/\n/g,"<br>")}</td></tr>`).join('')+'</table>';
+  }
+  document.getElementById("relat").innerHTML = html;
+})();
+</script>
+</body>
+</html>
