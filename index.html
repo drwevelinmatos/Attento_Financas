@@ -6,7 +6,149 @@
 <title>Financeiro Clínica Attento</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Work+Sans&display=swap" rel="stylesheet" />
 <style>
-/* ... (CSS igual ao seu, pode usar o que já forneceu no início) ... */
+  /* Cores principais conforme manual */
+  :root {
+    --verde-claro: #aaccbe;
+    --cinza-escuro: #575755;
+    --degrade-gold-start: #d4af37;
+    --degrade-gold-end: #b8860b;
+  }
+  body {
+    font-family: 'Work Sans', Arial, sans-serif;
+    margin: 20px;
+    background: #f7f7f7;
+    color: var(--cinza-escuro);
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--cinza-escuro);
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 30px;
+  }
+  section {
+    background: white;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  }
+  label {
+    display: block;
+    margin: 10px 0 6px;
+    font-weight: 600;
+  }
+  input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1.8px solid var(--verde-claro);
+    border-radius: 6px;
+    font-size: 1rem;
+    color: var(--cinza-escuro);
+    background: #fafafa;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--degrade-gold-start);
+    background: #fff;
+  }
+  button {
+    margin-top: 16px;
+    background: linear-gradient(135deg, var(--degrade-gold-start), var(--degrade-gold-end));
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: linear-gradient(135deg, var(--degrade-gold-end), var(--degrade-gold-start));
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 18px;
+    font-size: 0.95rem;
+  }
+  th, td {
+    border: 1.5px solid var(--verde-claro);
+    padding: 10px 14px;
+    text-align: left;
+    color: var(--cinza-escuro);
+  }
+  th {
+    background: var(--verde-claro);
+    font-weight: 700;
+  }
+  .inline {
+    display: inline-block;
+    margin-right: 14px;
+  }
+  .small-input {
+    width: 120px;
+  }
+  .input-group {
+    margin-bottom: 16px;
+  }
+  .flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 26px;
+  }
+  .flex-grow {
+    flex-grow: 1;
+    min-width: 180px;
+  }
+  .hidden {
+    display: none;
+  }
+  .category-list {
+    font-size: 0.9rem;
+    color: var(--cinza-escuro);
+    margin-top: 6px;
+  }
+  .text-small {
+    font-size: 0.85rem;
+    color: var(--cinza-escuro);
+  }
+  .error {
+    color: #b00020;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  hr {
+    margin: 30px 0;
+    border: none;
+    border-top: 2px solid var(--verde-claro);
+  }
+  /* Logo container at top */
+  #logo-container {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  #logo-container img {
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  #logo-container .tagline {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--verde-claro);
+  }
+
+  /* Scroll horizontal for tables on small screens */
+  .table-responsive {
+    overflow-x: auto;
+  }
 </style>
 </head>
 <body>
@@ -134,8 +276,62 @@
   </div>
 </section>
 
-<!-- Demais seções iguais ao código atual... -->
-<!-- ... -->
+<hr />
+
+<section id="controle-aluguel">
+  <h2>Controle de Recebimentos de Aluguel</h2>
+  <form id="aluguelForm">
+    <div class="input-group">
+      <label for="profissionalNome">Profissional</label>
+      <input type="text" id="profissionalNome" required />
+    </div>
+    <div class="flex-row">
+      <div class="input-group flex-grow">
+        <label>Períodos da Semana (Dia e Manhã/Tarde)</label>
+        <textarea id="periodosSemana" placeholder="Exemplo: Segunda - Manhã, Terça - Tarde" rows="3" required></textarea>
+      </div>
+      <div class="input-group flex-grow">
+        <label for="valorMensal">Valor Mensal (R$)</label>
+        <input type="number" id="valorMensal" min="0" step="0.01" required />
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="dataInicioAluguel">Data de Início</label>
+      <input type="date" id="dataInicioAluguel" required />
+    </div>
+    <div class="input-group">
+      <label for="dataBaixaAluguel">Data Baixa (quando o profissional sair)</label>
+      <input type="date" id="dataBaixaAluguel" />
+    </div>
+    <div class="input-group">
+      <label>Alterações de períodos e/ou valores (sem alterar dados anteriores)</label>
+      <textarea id="alteracoesAluguel" placeholder="Descreva alterações pontuais de período e/ou valor" rows="2"></textarea>
+    </div>
+    <button type="submit">Salvar Aluguel</button>
+  </form>
+  <h3>Profissionais Cadastrados</h3>
+  <div id="listaProfissionais" class="table-responsive"></div>
+</section>
+
+<hr />
+
+<section id="relatorios-section">
+  <h2>Relatórios e Balanço</h2>
+  <div class="input-group flex-row">
+    <div class="flex-grow">
+      <label for="periodoInicio">Data Início</label>
+      <input type="date" id="periodoInicio" />
+    </div>
+    <div class="flex-grow">
+      <label for="periodoFim">Data Fim</label>
+      <input type="date" id="periodoFim" />
+    </div>
+    <div class="flex-grow" style="margin-top: 38px;">
+      <button id="btnGerarRelatorio">Gerar Relatório</button>
+    </div>
+  </div>
+  <div id="relatorioOutput" class="table-responsive"></div>
+</section>
 
 <script>
 (() => {
